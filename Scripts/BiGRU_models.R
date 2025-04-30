@@ -1,4 +1,5 @@
 #### Bi-GRU model ####
+library(torch)
 #### NO TRAITS 
 BiGRU_NoTRAITS <- nn_module(
   initialize = function(embedding = 40L, rnn_hidden_size = 20L, rnn_layers = 3L, dropout_prob = 0.3) { 
@@ -11,7 +12,7 @@ BiGRU_NoTRAITS <- nn_module(
                        hidden_size = rnn_hidden_size,
                        num_layers = rnn_layers,  
                        batch_first = TRUE,
-                       dropout = ifelse(rnn_layers > 1, dropout_prob, 0), 
+                       dropout = dropout_prob, 
                        bidirectional = TRUE)
     
     self$output_layer <- nn_linear(in_features = 2 * rnn_hidden_size, out_features = 1L)
@@ -19,6 +20,7 @@ BiGRU_NoTRAITS <- nn_module(
   },
   
   forward = function(x) {
+    #browser()
     x <- self$embedding(x)
     rnn_out <- self$rnn(x)[[1]][, dim(x)[2], ]  
     rnn_out <- self$dropout_output(rnn_out)  
@@ -31,8 +33,8 @@ BiGRU_NoTRAITS <- nn_module(
 #### TRAITS ####
 
 BiGRU_TRAITS <- nn_module(
-  initialize = function(embedding = 1L, rnn_hidden_size = 20L, rnn_layers = 3L, dropout_prob = 0.3) {
-    self$embedding <- nn_embedding(num_embeddings = 425L, 
+  initialize = function(embedding = 40L, rnn_hidden_size = 20L, rnn_layers = 3L, dropout_prob = 0.3) {
+    self$embedding <- nn_embedding(num_embeddings = 615L, 
                                    embedding_dim = embedding, 
                                    sparse = FALSE, 
                                    scale_grad_by_freq = TRUE) # [batchsize, time, embedding]

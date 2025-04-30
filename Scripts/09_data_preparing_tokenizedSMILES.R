@@ -4,7 +4,7 @@
 library(readr)
 library(dplyr)
 Tokens <- readRDS("Data/Tokens.rds")
-df <- readRDS("Data/df_final.rds")
+df <- readRDS("Data/df_final.rds") # for CV 
 df <- df[, -c(4:210)] # exclude FP and MD 
 df <- df %>% select(-meanConc)
 
@@ -14,10 +14,6 @@ df = df |>
 
 df1 <- df %>% select(-CAS, -scientificNameStd)
 
-## only token
- df2 <- df1 %>% select(-SMILES, -logmeanConc, -meanConc, -randomFold, -speciesFold, -chemicalFold)
-
- 
 ##########################################
 #### how many unique tokens in dataset with toxicity values without NAs
 all_tokens_noNA <- unlist(df1[, 23:199])

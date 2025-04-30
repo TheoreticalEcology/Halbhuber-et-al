@@ -38,7 +38,7 @@ hyper_grid <- function(lr, dropout) {
   )
 }
 
-folds <- c("randomFold", "chemicalFold", "speciesFold")
+fold_columns <- c("randomFold", "chemicalFold", "speciesFold")
 descriptors <- c("Fingerprints", "MolDescriptor")
 trait_levels <- c("noTraits", "Traits")
 
@@ -53,8 +53,8 @@ for (trait in trait_levels) {
     hyperparameters$MLP[[trait]][[desc]] <- list()
     
     # Loop over all folds
-    for (fold in folds) {
-      hyperparameters$MLP[[trait]][[desc]][[fold]] <- hyper_grid_object
+    for (fold_column in fold_columns) {
+      hyperparameters$MLP[[trait]][[desc]][[fold_column]] <- hyper_grid_object
     }
   }
 }
@@ -65,7 +65,7 @@ for (trait in trait_levels) {
 for (desc in descriptors) {
   df <- if (desc == "MolDescriptor") df_MD else df_FP
   
-  for (fold_column in folds) {
+  for (fold_column in fold_columns) {
     for (trait in trait_levels) {
       
       k <- 10
